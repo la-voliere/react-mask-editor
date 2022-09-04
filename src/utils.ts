@@ -26,3 +26,8 @@ export const toMask = (canvas: HTMLCanvasElement) => {
 
   return dataUrl;
 }
+
+export const hexToRgb = (color: string) => {
+  var parts = color.replace("#", "").match(/.{1,2}/g);
+  return parts.map(part => parseInt(part, 16));
+}

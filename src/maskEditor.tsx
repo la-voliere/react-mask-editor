@@ -1,12 +1,12 @@
 import * as React from "react";
-import chroma from "chroma-js";
 import "./maskEditor.less";
+import { hexToRgb } from "./utils";
 
 export interface MaskEditorProps {
   src: string;
   canvasRef?: React.MutableRefObject<HTMLCanvasElement>;
   cursorSize?: number;
-  onCursorSizeChange: (size: number) => void;
+  onCursorSizeChange?: (size: number) => void;
   maskOpacity?: number;
   maskColor?: string;
   maskBlendMode?: "normal"|"multiply"|"screen"|"overlay"|"darken"|"lighten"|"color-dodge"|"color-burn"|"hard-light"|"soft-light"|"difference"|"exclusion"|"hue"|"saturation"|"color"|"luminosity"
@@ -20,7 +20,6 @@ export const MaskEditorDefaults = {
 }
 
 export const MaskEditor: React.FC<MaskEditorProps> = (props: MaskEditorProps) => {
-  const onCursorSizeChange = props.onCursorSizeChange;
   const src = props.src;
   const cursorSize = props.cursorSize ?? MaskEditorDefaults.cursorSize;
   const maskColor = props.maskColor ?? MaskEditorDefaults.maskColor;
@@ -99,7 +98,7 @@ export const MaskEditor: React.FC<MaskEditorProps> = (props: MaskEditorProps) =>
     }
     const scrollListener = (evt: WheelEvent) => {
       if (cursorContext) {
-        onCursorSizeChange(Math.max(0, cursorSize + (evt.deltaY > 0 ? 1 : -1)));
+        props.onCursorSizeChange(Math.max(0, cursorSize + (evt.deltaY > 0 ? 1 : -1)));
 
         cursorContext.clearRect(0, 0, size.x, size.y);
 
@@ -116,19 +115,23 @@ export const MaskEditor: React.FC<MaskEditorProps> = (props: MaskEditorProps) =>
     }
 
     cursorCanvas.current?.addEventListener("mousemove", listener);
-    cursorCanvas.current?.addEventListener("wheel", scrollListener);
+    if (props.onCursorSizeChange) {
+      cursorCanvas.current?.addEventListener("wheel", scrollListener);
+    }
     return () => {
       cursorCanvas.current?.removeEventListener("mousemove", listener);
-      cursorCanvas.current?.removeEventListener("wheel", scrollListener);
+      if (props.onCursorSizeChange) {
+        cursorCanvas.current?.removeEventListener("wheel", scrollListener);
+      }
     }
   }, [cursorContext, maskContext, cursorCanvas, cursorSize, maskColor, size]);
 
   const replaceMaskColor = React.useCallback((hexColor: string, invert: boolean) => {
     const imageData = maskContext?.getImageData(0, 0, size.x, size.y);
-    const color = chroma(hexColor);
+    const color = hexToRgb(hexColor);
     if (imageData) {
       for (var i = 0; i < imageData?.data.length; i += 4) {
-        const pixelColor = ((imageData.data[i] === 255) != invert) ? [255, 255, 255] : color.rgb(true);
+        const pixelColor = ((imageData.data[i] === 255) != invert) ? [255, 255, 255] : color;
         imageData.data[i] = pixelColor[0];
         imageData.data[i + 1] = pixelColor[1];
         imageData.data[i + 2] = pixelColor[2];

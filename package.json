@@ -9,7 +9,6 @@
     "dist"
   ],
   "peerDependencies": {
-    "chroma-js": "^2",
     "react": "^18"
   },
   "scripts": {
@@ -30,9 +29,7 @@
     "@storybook/manager-webpack5": "^6",
     "@storybook/testing-library": "^0.0.9",
     "@storybook/theming": "^6",
-    "@types/chroma-js": "^2.1.4",
     "@types/react": "^18",
-    "chroma-js": "^2",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "file-loader": "^6.2.0",

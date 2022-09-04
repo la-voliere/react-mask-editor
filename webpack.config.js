@@ -18,8 +18,7 @@ module.exports = {
     modules: ["node_modules"],
   },
   externals: [
-    "react",
-    "chroma-js"
+    "react"
   ],
   module: {
     rules: [
