@@ -1,12 +1,26 @@
 {
   "name": "react-mask-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "General-purpose mask editor for React image manipulation apps",
   "main": "./dist/index.js",
   "author": "doches@gmail.com",
   "types": "./dist/src/index.d.ts",
   "files": [
     "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/la-voliere/react-mask-editor.git"
+  },
+  "homepage": "https://docs.voliere.dev/react-mask-editor",
+  "keywords": [
+    "canvas",
+    "react",
+    "react-component",
+    "reactjs",
+    "drawing",
+    "mask",
+    "editor"
   ],
   "peerDependencies": {
     "react": "^18"
